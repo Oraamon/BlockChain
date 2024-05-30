@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finance Manager</title>
+    <script>
+        document.write('<link rel="stylesheet" href="styles.css?version=' + new Date().getTime() + '">');
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Finance Manager</h1>
+        <form id="transaction-form">
+            <label for="description">Description:</label>
+            <input type="text" id="description" name="description" required>
+            
+            <label for="amount">Amount:</label>
+            <input type="number" id="amount" name="amount" required>
+            
+            <button type="submit">Add Transaction</button>
+        </form>
+        <h2>Transactions</h2>
+        <div id="transactions"></div>
+    </div>
+    <h2>Blockchain</h2>
+    <div id="blockchain-container"></div>
+
+    <script src="script.js?version=<%= (new Date()).getTime() %>"></script>
+</body>
+</html>
