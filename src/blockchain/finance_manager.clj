@@ -8,7 +8,7 @@
 
 (defn add-transaction [transaction]
   (swap! transactions conj transaction)
-  (mine-block [transaction]))
+)
 
 (defn get-transactions []
   @transactions)

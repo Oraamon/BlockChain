@@ -39,6 +39,21 @@ function loadTransactions() {
     });
 }
 
+document.getElementById('register-transactions').addEventListener('click', function() {
+    fetch('/registrar-transacoes', {
+        method: 'POST'
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert(data.status);
+        loadBlockchain();
+        loadTransactions(); 
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+});
+
 function loadBlockchain() {
     fetch('/cadeia', {cache: 'no-cache'})
     .then(response => response.json())

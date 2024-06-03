@@ -15,6 +15,13 @@
     (let [transacao (parse-transaction (slurp body))]
       (add-transaction transacao)
       {:status 201 :body (json/generate-string {:status "Transação adicionada"})}))
+  (POST "/registrar-transacoes" []
+    (let [transacoes @transactions]
+      (if (empty? transacoes)
+        {:status 400 :body (json/generate-string {:status "No transactions to register"})}
+        (do
+          (mine-block transacoes)
+          {:status 201 :body (json/generate-string {:status "Transactions registered in blockchain"})}))))
   (GET "/transacoes" []
     {:status 200 :body (json/generate-string (get-transactions))})
   (GET "/cadeia" []

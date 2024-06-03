@@ -32,7 +32,7 @@ label {
     color: #333;
 }
 
-input, textarea {
+input, select, textarea {
     padding: 10px;
     margin-top: 5px;
     width: calc(100% - 20px);
@@ -73,7 +73,7 @@ button:hover {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     width: 80%;
     width: 400px;
-    min-height: 300px; 
+    min-height: 300px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
