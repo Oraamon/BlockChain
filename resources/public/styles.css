@@ -8,6 +8,15 @@ body {
     margin: 0;
 }
 
+button.loading {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+button.loading::after {
+    content: " Loading...";
+}
+
 .container {
     background-color: white;
     padding: 20px;

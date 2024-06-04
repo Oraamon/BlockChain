@@ -24,8 +24,11 @@
           {:status 201 :body (json/generate-string {:status "Transactions registered in blockchain"})}))))
   (GET "/transacoes" []
     {:status 200 :body (json/generate-string (get-transactions))})
+  (GET "/saldo" []
+    (let [balance (calculate-balance)]
+      {:status 200 :body (json/generate-string {:saldo balance})}))
   (GET "/cadeia" []
-    (let [cadeia (rest @blockchain)] ; Remove o bloco gênese da resposta
+    (let [cadeia (rest @blockchain)]
       {:status 200 :body (json/generate-string cadeia)}))
   (GET "/cotacao" request
     (let [params (:query-params request)

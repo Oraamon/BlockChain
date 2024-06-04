@@ -6,6 +6,15 @@
 
 (def transactions (atom []))
 
+(defn calculate-balance []
+  (reduce (fn [balance {:keys [description amount]}]
+            (let [amount-num (read-string amount)]
+              (if (= description "Receita")
+                (+ balance amount-num)
+                (- balance amount-num))))
+          0
+          @transactions))
+
 (defn add-transaction [transaction]
   (swap! transactions conj transaction)
 )

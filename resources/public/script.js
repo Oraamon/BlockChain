@@ -40,6 +40,10 @@ function loadTransactions() {
 }
 
 document.getElementById('register-transactions').addEventListener('click', function() {
+    const button = document.getElementById('register-transactions');
+    button.classList.add('loading');
+    button.disabled = true;
+
     fetch('/registrar-transacoes', {
         method: 'POST'
     })
@@ -49,8 +53,14 @@ document.getElementById('register-transactions').addEventListener('click', funct
         loadBlockchain();
         loadTransactions(); 
     })
+    .finally(() => {
+        button.classList.remove('loading');
+        button.disabled = false;
+    })
     .catch(error => {
         console.error('Error:', error);
+        button.classList.remove('loading');
+        button.disabled = false;
     });
 });
 
