@@ -4,26 +4,23 @@
             [clj-http.client :as http-client]
             [clojure.tools.logging :as log]))
 
-;; Definição do bloco Genesis
-(def genesis-block {:index 0
-                    :timestamp (System/currentTimeMillis)
-                    :transactions []
-                    :previous-hash "0"
-                    :nonce 0
-                    :hash "0000000000000000000000000000000000000000000000000000000000000000"})
-
-;; Atom para armazenar a blockchain
-(defonce blockchain (atom [genesis-block]))
-
 ;; Função para calcular o hash SHA-256 de uma string
 (defn sha256 [s]
   (let [digest (java.security.MessageDigest/getInstance "SHA-256")]
     (.update digest (.getBytes s))
     (str/join (map #(format "%02x" %) (.digest digest)))))
 
-;; Função para calcular o hash de um bloco
-(defn hash-block [block]
-  (sha256 (str (:index block) (:timestamp block) (:transactions block) (:previous-hash block) (:nonce block))))
+;; Definição do bloco Genesis
+(def genesis-block
+  {:index 0
+   :timestamp (System/currentTimeMillis)
+   :transactions [{:description "Bloco Genesis"}]
+   :previous-hash "0"
+   :nonce 0
+   :hash (sha256 (str 0 (System/currentTimeMillis) [{:description "Bloco Genesis"}] "0" 0))})
+
+;; Atom para armazenar a blockchain
+(defonce blockchain (atom [genesis-block]))
 
 ;; Função para verificar se um hash é válido
 (defn valid-hash? [hash]

@@ -18,7 +18,7 @@
 
 ;; Função para adicionar uma transação
 (defn add-transaction [transaction]
-  (swap! transactions conj transaction)
+  (swap! transactions conj transaction))
 
 ;; Função para obter todas as transações
 (defn get-transactions []
