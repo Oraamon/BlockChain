@@ -4,6 +4,7 @@
             [clj-http.client :as http-client]
             [clojure.tools.logging :as log]))
 
+;; Definição do bloco Genesis
 (def genesis-block {:index 0
                     :timestamp (System/currentTimeMillis)
                     :transactions []
@@ -11,19 +12,24 @@
                     :nonce 0
                     :hash "0000000000000000000000000000000000000000000000000000000000000000"})
 
+;; Atom para armazenar a blockchain
 (defonce blockchain (atom [genesis-block]))
 
+;; Função para calcular o hash SHA-256 de uma string
 (defn sha256 [s]
   (let [digest (java.security.MessageDigest/getInstance "SHA-256")]
     (.update digest (.getBytes s))
     (str/join (map #(format "%02x" %) (.digest digest)))))
 
+;; Função para calcular o hash de um bloco
 (defn hash-block [block]
   (sha256 (str (:index block) (:timestamp block) (:transactions block) (:previous-hash block) (:nonce block))))
 
+;; Função para verificar se um hash é válido
 (defn valid-hash? [hash]
   (str/starts-with? hash "0000"))
 
+;; Função para realizar o Proof of Work
 (defn proof-of-work [index timestamp transactions previous-hash]
   (loop [nonce 0]
     (let [hash (sha256 (str index timestamp transactions previous-hash nonce))]
@@ -31,6 +37,7 @@
         {:nonce nonce :hash hash}
         (recur (inc nonce))))))
 
+;; Função para criar um novo bloco
 (defn create-block [transactions previous-hash]
   (let [index (count @blockchain)
         timestamp (System/currentTimeMillis)
@@ -42,12 +49,15 @@
      :nonce (:nonce pow-result)
      :hash (:hash pow-result)}))
 
+;; Função para adicionar um bloco à blockchain
 (defn add-block [block]
   (swap! blockchain conj block))
 
+;; Função para obter o bloco mais recente da blockchain
 (defn latest-block []
   (last @blockchain))
 
+;; Função para minerar um novo bloco
 (defn mine-block [transactions]
   (let [previous-block (latest-block)
         new-block (create-block transactions (:hash previous-block))]
