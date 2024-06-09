@@ -28,7 +28,7 @@
     (let [balance (calculate-balance)]
       {:status 200 :body (json/generate-string {:saldo balance})}))
   (GET "/cadeia" []
-    (let [cadeia (rest @blockchain)]
+    (let [cadeia @blockchain]
       {:status 200 :body (json/generate-string cadeia)}))
   (GET "/cotacao" request
     (let [params (:query-params request)
