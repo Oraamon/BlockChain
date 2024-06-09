@@ -10,18 +10,6 @@
     (.update digest (.getBytes s))
     (str/join (map #(format "%02x" %) (.digest digest)))))
 
-;; Definição do bloco Genesis
-(def genesis-block
-  {:index 0
-   :timestamp (System/currentTimeMillis)
-   :transactions [{:description "Bloco Genesis"}]
-   :previous-hash "0"
-   :nonce 0
-   :hash (sha256 (str 0 (System/currentTimeMillis) [{:description "Bloco Genesis"}] "0" 0))})
-
-;; Atom para armazenar a blockchain
-(defonce blockchain (atom [genesis-block]))
-
 ;; Função para verificar se um hash é válido
 (defn valid-hash? [hash]
   (str/starts-with? hash "0000"))
@@ -33,6 +21,25 @@
       (if (valid-hash? hash)
         {:nonce nonce :hash hash}
         (recur (inc nonce))))))
+
+;; Definição do bloco Genesis
+(def genesis-block
+  (let [genesis-template
+        {:index 0
+         :timestamp (System/currentTimeMillis)
+         :transactions [{:description "Bloco Genesis"}]
+         :previous-hash "0"}
+        genesis-pow-result (proof-of-work (:index genesis-template)
+                                           (:timestamp genesis-template)
+                                           (:transactions genesis-template)
+                                           (:previous-hash genesis-template))]
+    (assoc genesis-template
+           :nonce (:nonce genesis-pow-result)
+           :hash (:hash genesis-pow-result))))
+
+;; Atom para armazenar a blockchain
+(defonce blockchain (atom [genesis-block]))
+
 
 ;; Função para criar um novo bloco
 (defn create-block [transactions previous-hash]
